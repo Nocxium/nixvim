@@ -10,9 +10,11 @@
     autoCmd = [
       {
         event = [ "BufReadPost" ];
-        command = ''
-          if vim.fn.line("'\"") > 1 && vim.fn.line("'\"") <= vim.fn.line("$") then
-            vim.cmd "normal! g`\""
+        callback.__raw = ''
+          function()
+            if vim.fn.line("'\"") > 1 && vim.fn.line("'\"") <= vim.fn.line("$") then
+              vim.cmd "normal! g`\""
+            end
           end
         '';
         group = "general";
