@@ -1,7 +1,9 @@
 {
   # Import all your configuration modules here
   imports = [
-    ./default-plugins.nix
+    ./simple-plugins.nix
     ./colorscheme.nix
+    ./keymaps.nix
+    ./options.nix
   ];
 }
