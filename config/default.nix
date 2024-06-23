@@ -5,6 +5,6 @@
     ./colorscheme.nix
     ./keymaps.nix
     ./options.nix
-    ./autocmd.nix
+    #./autocmd.nix
   ];
 }
