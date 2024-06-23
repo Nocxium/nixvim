@@ -33,20 +33,20 @@
         command = "startinsert";
       }
       {
-        event = ["BufReadPost", "BufNewFile"];
+        event = ["BufReadPost" "BufNewFile"];
         once = true;
         command = ''
           if vim.fn.has "wsl" == 1 then
-            vim.g.clipboard = {
+            vim.g.clipboard = [
               copy = {
-                ["+"] = "win32yank.exe -i --crlf",
-                ["*"] = "win32yank.exe -i --crlf",
-              },
+                ["+"] = "win32yank.exe -i --crlf"
+                ["*"] = "win32yank.exe -i --crlf"
+              }
               paste = {
-                ["+"] = "win32yank.exe -o --lf",
-                ["*"] = "win32yank.exe -o --lf",
-              },
-            }
+                ["+"] = "win32yank.exe -o --lf"
+                ["*"] = "win32yank.exe -o --lf"
+              }
+            ]
           end
           vim.opt.clipboard = "unnamedplus"
         '';
@@ -76,7 +76,7 @@
       {
         event = "TextYankPost";
         command = ''
-          require("vim.highlight").on_yank { higroup = "YankHighlight", timeout = 200 }
+          require("vim.highlight").on_yank { higroup = "YankHighlight" timeout = 200 }
         '';
         group = "general";
         desc = "Highlight when yanking";
@@ -84,14 +84,14 @@
       {
         event = "BufEnter";
         command = ''
-          vim.opt.formatoptions:remove { "c", "r", "o" }
+          vim.opt.formatoptions:remove { "c" "r" "o" }
         '';
         group = "general";
         desc = "Disable New Line Comment";
       }
       {
         event = "FileType";
-        pattern = ["c", "cpp", "py", "java", "cs"];
+        pattern = ["c" "cpp" "py" "java" "cs"];
         command = ''
           vim.bo.shiftwidth = 4
         '';
@@ -128,7 +128,7 @@
       }
       {
         event = "FileType";
-        pattern = ["gitcommit", "markdown", "text", "log"];
+        pattern = ["gitcommit" "markdown" "text" "log"];
         command = ''
           vim.opt_local.wrap = true
           vim.opt_local.spell = false
