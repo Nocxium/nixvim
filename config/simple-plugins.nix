@@ -1,7 +1,95 @@
 { pkgs, ...}:
 {
   plugins = {
-    cmp.enable = true;
+    cmp = {
+      enable = true;
+      autoEnableSources = false;
+      settings = {
+        experimental = {
+          ghost_text = true;
+        };
+      };
+      settings = {
+        mapping = {
+          __raw = ''
+            cmp.mapping.preset.insert({
+              ["<C-k>"] = cmp.mapping.select_prev_item(),
+              ["<C-j>"] = cmp.mapping.select_next_item(),
+              ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1)),
+              ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1)),
+              ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+              ["<C-e>"] = cmp.mapping({
+                i = cmp.mapping.abort(),
+                c = cmp.mapping.close(),
+              }),
+              -- Accept currently selected item. If none selected, `select` first item.
+              -- Set `select` to `false` to only confirm explicitly selected items.
+              ["<CR>"] = cmp.mapping.confirm({ select = false }),
+              ["<Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                  cmp.select_next_item()
+                elseif luasnip.expandable() then
+                  luasnip.expand()
+                elseif luasnip.expand_or_jumpable() then
+                  luasnip.expand_or_jump()
+                else
+                  fallback()
+                end
+              end, {
+                "i",
+                "s",
+              }),
+              ["<S-Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                  cmp.select_prev_item()
+                elseif luasnip.jumpable(-1) then
+                  luasnip.jump(-1)
+                else
+                  fallback()
+                end
+              end, {
+                "i",
+                "s",
+              }),
+            })
+          '';
+        };
+        snippet = {
+          expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+        };
+        sources = {
+          __raw = ''
+            cmp.config.sources({
+              { name = "nvim_lsp" },
+              { name = "nvim_lua" },
+              { name = "luasnip" },
+              { name = "buffer" },
+              { name = "path" },
+              }, {
+            {name = 'buffer'},
+            })
+          '';
+        };
+        performance = {
+          debounce = 60;
+          fetching_timeout = 200;
+          max_view_entries = 30;
+        };
+        window = {
+          completion = {
+            border = "rounded";
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+          };
+          documentation = {
+            border = "rounded";
+          };
+        };
+        formatting = {
+          fields = ["kind" "abbr" "menu"];
+          expandable_indicator = true;
+        };
+      };
+    };
     cmp-buffer.enable = true;
     cmp-cmdline.enable = true;
     cmp-nvim-lsp.enable = true;
