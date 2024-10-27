@@ -25,32 +25,32 @@
               -- Accept currently selected item. If none selected, `select` first item.
               -- Set `select` to `false` to only confirm explicitly selected items.
               ["<CR>"] = cmp.mapping.confirm({ select = false }),
-              ["<Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                  cmp.select_next_item()
-                elseif luasnip.expandable() then
-                  luasnip.expand()
-                elseif luasnip.expand_or_jumpable() then
-                  luasnip.expand_or_jump()
-                else
-                  fallback()
-                end
-              end, {
-                "i",
-                "s",
-              }),
-              ["<S-Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                  cmp.select_prev_item()
-                elseif luasnip.jumpable(-1) then
-                  luasnip.jump(-1)
-                else
-                  fallback()
-                end
-              end, {
-                "i",
-                "s",
-              }),
+--               ["<Tab>"] = cmp.mapping(function(fallback)
+--                 if cmp.visible() then
+--                   cmp.select_next_item()
+--                 elseif luasnip.expandable() then
+--                   luasnip.expand()
+--                 elseif luasnip.expand_or_jumpable() then
+--                   luasnip.expand_or_jump()
+--                 else
+--                   fallback()
+--                 end
+--               end, {
+--                 "i",
+--                 "s",
+--               }),
+--               ["<S-Tab>"] = cmp.mapping(function(fallback)
+--                 if cmp.visible() then
+--                   cmp.select_prev_item()
+--                 elseif luasnip.jumpable(-1) then
+--                   luasnip.jump(-1)
+--                 else
+--                   fallback()
+--                 end
+--              end, {
+--                "i",
+--                "s",
+--              }),
             })
           '';
         };
@@ -108,8 +108,9 @@
     hmts.enable = true;
     image.enable = true;
     # indent-blankline.enable = true;
-    lazy.enable = true;
-    lazygit.enable = true;
+    lazygit = {
+      enable = true;
+    };
     lsp.enable = true;
     lspsaga.enable = true;
     lualine.enable = true;
@@ -230,6 +231,15 @@
 
   extraPlugins = with pkgs.vimPlugins; [
     vim-rooter
+    lz-n
   ];
-  extraConfigLua = "vim.g.rooter_patterns = {'>.config', '.git', '.ozz', 'index.md', '>Documents', '>rPiPico', '>Pico', '>dotfiles', '=home-manager', '=nixos', '*.norg'}";
+  extraConfigLua = ''
+    vim.g.rooter_patterns = {'>.config', '.git', '.ozz', 'index.md', '>Documents', '>rPiPico', '>Pico', '>dotfiles', '=home-manager', '=nixos', '*.norg'}
+
+    require("lz.n").load {
+      "lazygit.nvim",
+      -- load cmp on InsertEnter
+      event = "BufEnter *lua",
+    }
+  '';
 }
